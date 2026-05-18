@@ -1,0 +1,28 @@
+pipeline:
+  name: Lakehouse-DQ-Pipeline
+  version: "1.0"
+  description: "E-commerce Lakehouse with Data Quality framework"
+
+paths:
+  raw: "/mnt/datalake/raw/ecommerce/"
+  bronze: "/mnt/datalake/bronze/transactions"
+  silver: "/mnt/datalake/silver/transactions_clean"
+  quarantine: "/mnt/datalake/quarantine/transactions_rejected"
+  gold_revenue: "/mnt/datalake/gold/daily_revenue"
+  gold_products: "/mnt/datalake/gold/product_performance"
+  gold_customers: "/mnt/datalake/gold/customer_ltv"
+
+data_quality:
+  checks:
+    - {column: transaction_id, type: not_null, threshold: 0.99}
+    - {column: transaction_id, type: unique, threshold: 0.98}
+    - {column: customer_id, type: not_null, threshold: 0.99}
+    - {column: country, type: not_null, threshold: 0.90}
+    - {column: quantity, type: positive, threshold: 0.95}
+    - {column: total_amount, type: positive, threshold: 0.95}
+    - {column: payment_method, type: values_in_set, values: [credit_card, paypal, bank_transfer, crypto], threshold: 0.95}
+    - {column: unit_price, type: range, min: 0.01, max: 10000.0, threshold: 0.95}
+
+optimization:
+  partition_column: "order_month"
+  z_order_columns: ["customer_id", "order_timestamp"]
