@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+venv/
+.env
+
+# Databricks
+.databricks/
+
+# Data (keep samples only)
+*.csv
+*.parquet
+*.json
+!data/sample/*.csv
+!data/sample/*.json
+!config/*.yaml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.pem
+*.key
+credentials.json
